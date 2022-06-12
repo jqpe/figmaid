@@ -16,7 +16,9 @@ You can configure directories by creating a file in <home>/.config/figmaid/figma
 }
 ```
   <sub>If the above works for you (you're using Ubuntu and don't need additional folders), you don't need to create the file.</sub>
-  
+
+NB: the port option is exposed for use with reverse proxies, Figma always requests fonts from localhost:18412.
+
 macOS includes fonts in /Library/Fonts/ and Windows in C:\Windows\Fonts, the default configuration targets Ubuntu.
   
 To start the web server run `figmaid` and you should see a log about figmaid being running on port 18412. If it panics with Address already in use, check for running processes with `sudo netstat -ltnp | grep -w '18412'`. If you're using [figma-linux-font-helper](https://github.com/Figma-Linux/figma-linux-font-helper) you need to stop the service with `sudo systemctl stop fonthelper`
