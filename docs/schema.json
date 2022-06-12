@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "figmaid",
+  "properties": {
+    "dir": {
+      "description": "Directories to load font files from.",
+      "default": ["/usr/lib/share/fonts", "/usr/share/fonts"],
+      "type": "array"
+    },
+    "port": {
+      "description": "Port to bind the server to. Provided if you need to use a reverse proxy.",
+      "default": 18412,
+      "type": "number"
+    }
+  }
+}
