@@ -1,6 +1,8 @@
 //! Provides utilies for validating and loading the configuration file in addition to providing a default implementation.
 
 use home::home_dir;
+use hyper::Client;
+use hyper_tls::HttpsConnector;
 use jsonschema::JSONSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -91,25 +93,39 @@ pub fn load_config() -> Config {
 }
 
 /// Attempts to load the schema from ./docs/schema.json.
-pub fn load_schema_json() -> Option<serde_json::Value> {
-    let schema = fs::read(Path::new("./docs/schema.json"));
+pub async fn load_schema_json() -> Option<serde_json::Value> {
+    let https = HttpsConnector::new();
+    let client = Client::builder().build::<_, hyper::Body>(https);
 
-    if let Ok(schema) = schema {
-        if let Ok(schema) = String::from_utf8(schema) {
-            let schema: Result<serde_json::Value, _> = serde_json::from_str(schema.as_str());
+    let uri = "https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json"
+        .parse()
+        .unwrap();
 
-            if let Ok(schema) = schema {
-                return Some(schema);
+    match client.get(uri).await {
+        Ok(response) => {
+            if let Ok(schema_bytes) = hyper::body::to_bytes(response.into_body()).await {
+                let schema: Result<serde_json::Value, _> =
+                    serde_json::from_str(&String::from_utf8(schema_bytes.to_vec()).unwrap());
+
+                if let Ok(schema) = schema {
+                    Some(schema)
+                } else {
+                    None
+                }
+            } else {
+                None
             }
         }
+        Err(err) => {
+            eprintln!("Couldn't fetch schema. {}", err);
+            None
+        }
     }
-
-    None
 }
 
 /// Validates the configuration. Logs any errors to stderr.
-pub fn is_config_valid(json: &serde_json::Value) -> bool {
-    match load_schema_json() {
+pub async fn is_config_valid(json: &serde_json::Value) -> bool {
+    match load_schema_json().await {
         Some(schema) => {
             let compiled = JSONSchema::compile(&schema).expect("A valid schema");
             let validation = compiled.validate(json);

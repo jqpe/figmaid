@@ -6,14 +6,15 @@ use std::{
 use figmaid::config::{is_config_valid, Config};
 use opener::open;
 
-fn main() {
+#[tokio::main]
+async fn main() {
     let config_path = Path::new(&home::home_dir().expect("Couldn't get home directory"))
         .join(".config/figmaid/figmaid.json");
 
     match std::fs::read(config_path.clone()) {
         Ok(config) => {
             if let Ok(config) = serde_json::from_str(&String::from_utf8_lossy(&config)) {
-                if is_config_valid(&config) {
+                if is_config_valid(&config).await {
                     println!("Configuration is OK.")
                 }
             } else {
