@@ -2,7 +2,7 @@
   "$schema": "http://json-schema.org/draft-07/schema",
   "title": "figmaid",
   "properties": {
-    "dir": {
+    "directories": {
       "description": "Directories to load font files from.",
       "default": ["/usr/lib/share/fonts", "/usr/share/fonts"],
       "type": "array"
