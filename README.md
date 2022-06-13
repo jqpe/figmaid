@@ -30,3 +30,5 @@ To start the web server run `figmaid` and you should see a log about figmaid bei
 - Small. Includes only the barebones in terms of functionality.
 - Correctly handles CORS preflight requests. Not implementing these is probably why some users couldn't get figma-linux-font-helper to work.
 - Otherwise equilavent functionality, but figmaid provides correct font weights.
+- Works without root access. 
+- No service as of yet. figma-linux-font-helper runs on background by default and the server is restarted when you reboot. 
