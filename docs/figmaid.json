@@ -1,0 +1,5 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json",
+  "port": 18412,
+  "directories": ["/usr/share/fonts", "/usr/lib/share/fonts"]
+}
