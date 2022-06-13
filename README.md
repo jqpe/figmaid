@@ -1,21 +1,12 @@
 # figmaid
 
-Web server that allows you to use locally installed fonts in Figma on Linux. It works on Windows/macOS as well, but you should probably use [Figma's  official app](https://help.figma.com/hc/en-us/articles/360039956894-Access-local-fonts-on-your-computer). 
+Web server that allows you to use locally installed fonts in Figma on Linux.
 
 
 ## Install
 `cargo install --git https://github.com/jqpe/figmaid` 
 
-You can configure directories by creating a file in $HOME/.config/figmaid/figmaid.json and pasting the following:
-  
- ```json
-{
-  "$schema": "https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json",
-  "port": 18412,
-  "directories": ["/usr/share/fonts", "/usr/lib/share/fonts"]
-}
-```
-  <sub>If the above works for you (you're using Ubuntu and don't need additional folders), you don't need to create the file.</sub>
+To add additional directories ([aside from the default configuration](https://github.com/jqpe/figmaid/blob/main/docs/figmaid.json)) run `figmaid -t`.  
 
 NB: the port option is exposed for use with reverse proxies, Figma always requests fonts from localhost:18412.
 
