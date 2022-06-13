@@ -1,11 +1,10 @@
 //! Provides utilies for validating and loading the configuration file in addition to providing a default implementation.
 
 use home::home_dir;
-#[cfg(todo)]
 use jsonschema::JSONSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::{fs, path::Path, env};
+use std::{env, fs, path::Path};
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
@@ -21,7 +20,7 @@ impl From<&Config> for serde_json::Value {
 
 impl Config {
     pub fn new(port: u16, directories: Vec<String>) -> Self {
-        Self { 
+        Self {
             port: match env::var("PORT") {
                 Ok(port) => port.parse().unwrap_or_else(|err| {
                     eprintln!(
@@ -38,7 +37,7 @@ impl Config {
                         .split(',')
                         .map(|str| str.to_string())
                         .collect::<Vec<String>>();
-    
+
                     dirs
                 }
                 _ => directories,
@@ -47,17 +46,28 @@ impl Config {
     }
 }
 
-
-impl Default for Config {
-    fn default() -> Self {
-        Config::new(18412, vec![
-            "/usr/share/fonts".to_string(),
-            "/usr/lib/share/fonts".to_string(),
-        ])
+impl ToString for Config {
+    fn to_string(&self) -> String {
+        if let Ok(pretty) = serde_json::to_string_pretty(&self) {
+            pretty
+        } else {
+            String::from("")
+        }
     }
 }
 
-    
+impl Default for Config {
+    fn default() -> Self {
+        Config::new(
+            18412,
+            vec![
+                "/usr/share/fonts".to_string(),
+                "/usr/lib/share/fonts".to_string(),
+            ],
+        )
+    }
+}
+
 /// Load configuration file from `~/.config/figmaid/figmaid.json` or fallback to the default configuration.
 ///
 /// The ~ represents the current user's home directory.
@@ -72,7 +82,7 @@ pub fn load_config() -> Config {
 
     if let Ok(config) = fs::read(config_path) {
         let json_string = String::from_utf8_lossy(&config);
-        let json: Config = serde_json::from_str(&json_string).unwrap_or(default_config);
+        let json = serde_json::from_str(&json_string).unwrap_or(default_config);
 
         return Config::new(json.port, json.directories);
     }
@@ -81,7 +91,6 @@ pub fn load_config() -> Config {
 }
 
 /// Attempts to load the schema from ./docs/schema.json.
-#[cfg(todo)]
 pub fn load_schema_json() -> Option<serde_json::Value> {
     let schema = fs::read(Path::new("./docs/schema.json"));
 
@@ -98,13 +107,26 @@ pub fn load_schema_json() -> Option<serde_json::Value> {
     None
 }
 
-/// Validates the schema.
-#[cfg(todo)]
-pub fn schema_is_valid(json: &serde_json::Value) -> bool {
-    if let Some(schema) = load_schema_json() {
-        let compiled = JSONSchema::compile(&schema).expect("A valid schema");
-        return compiled.is_valid(json);
-    }
+/// Validates the configuration. Logs any errors to stderr.
+pub fn is_config_valid(json: &serde_json::Value) -> bool {
+    match load_schema_json() {
+        Some(schema) => {
+            let compiled = JSONSchema::compile(&schema).expect("A valid schema");
+            let validation = compiled.validate(json);
 
-    false
+            if let Err(errors) = validation {
+                for error in errors {
+                    eprintln!("Validation error: {} {}", error.instance_path, error);
+                }
+
+                return false;
+            }
+
+            true
+        }
+        None => {
+            eprintln!("Couldn't load schema.");
+            false
+        }
+    }
 }
