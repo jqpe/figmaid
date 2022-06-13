@@ -366,6 +366,7 @@ dependencies = [
  "hyper",
  "jsonschema",
  "mdbook",
+ "opener",
  "regex",
  "serde",
  "serde_json",
