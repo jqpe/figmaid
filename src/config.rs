@@ -5,7 +5,7 @@ use home::home_dir;
 use jsonschema::JSONSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
-use std::{fs, path::Path};
+use std::{fs, path::Path, env};
 
 #[derive(Serialize, Deserialize)]
 pub struct Config {
@@ -22,18 +22,18 @@ impl From<&Config> for serde_json::Value {
 impl Config {
     pub fn new(port: u16, directories: Vec<String>) -> Self {
         Self { 
-            port: match PORT {
-                Some(port) => port.parse().unwrap_or_else(|err| {
+            port: match env::var("PORT") {
+                Ok(port) => port.parse().unwrap_or_else(|err| {
                     eprintln!(
                         "PORT environment variable was set, but couldn't be parsed into an unsigned integer: {}",
                         err
                     );
                     18412
                 }),
-                None => port,
+                _ => port,
             },
-            directories: match DIRS {
-                Some(dirs) => {
+            directories: match env::var("DIRS") {
+                Ok(dirs) => {
                     let dirs = dirs
                         .split(',')
                         .map(|str| str.to_string())
@@ -41,7 +41,7 @@ impl Config {
     
                     dirs
                 }
-                None => directories,
+                _ => directories,
             },
          }
     }
@@ -58,11 +58,6 @@ impl Default for Config {
 }
 
     
-
-const PORT: Option<&'static str> = option_env!("PORT");
-/// Comma seperated list of directories.
-const DIRS: Option<&'static str> = option_env!("DIRS");
-
 /// Load configuration file from `~/.config/figmaid/figmaid.json` or fallback to the default configuration.
 ///
 /// The ~ represents the current user's home directory.
