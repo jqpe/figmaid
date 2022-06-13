@@ -1,4 +1,4 @@
-//! Handles requests to
+//! Handles requests to figma routes.
 //! - GET|OPTIONS `/figma/font-files` for a JSON file of all loaded fonts.
 //! - GET|OPTIONS `/figma/font-file` for a single font file.
 //!
