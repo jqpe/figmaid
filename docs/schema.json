@@ -5,7 +5,11 @@
     "directories": {
       "description": "Directories to load font files from.",
       "default": ["/usr/lib/share/fonts", "/usr/share/fonts"],
-      "type": "array"
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
     },
     "port": {
       "description": "Port to bind the server to. Provided if you need to use a reverse proxy.",
