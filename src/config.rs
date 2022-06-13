@@ -19,6 +19,46 @@ impl From<&Config> for serde_json::Value {
     }
 }
 
+impl Config {
+    pub fn new(port: u16, directories: Vec<String>) -> Self {
+        Self { 
+            port: match PORT {
+                Some(port) => port.parse().unwrap_or_else(|err| {
+                    eprintln!(
+                        "PORT environment variable was set, but couldn't be parsed into an unsigned integer: {}",
+                        err
+                    );
+                    18412
+                }),
+                None => port,
+            },
+            directories: match DIRS {
+                Some(dirs) => {
+                    let dirs = dirs
+                        .split(',')
+                        .map(|str| str.to_string())
+                        .collect::<Vec<String>>();
+    
+                    dirs
+                }
+                None => directories,
+            },
+         }
+    }
+}
+
+
+impl Default for Config {
+    fn default() -> Self {
+        Config::new(18412, vec![
+            "/usr/share/fonts".to_string(),
+            "/usr/lib/share/fonts".to_string(),
+        ])
+    }
+}
+
+    
+
 const PORT: Option<&'static str> = option_env!("PORT");
 /// Comma seperated list of directories.
 const DIRS: Option<&'static str> = option_env!("DIRS");
@@ -33,38 +73,13 @@ const DIRS: Option<&'static str> = option_env!("DIRS");
 pub fn load_config() -> Config {
     let config_path = Path::new(&home_dir().unwrap()).join(".config/figmaid/figmaid.json");
 
-    let default_config = Config {
-        port: match PORT {
-            Some(port) => port.parse().unwrap_or_else(|err| {
-                eprintln!(
-                    "PORT environment variable was set, but couldn't be parsed into an integer: {}",
-                    err
-                );
-                18412
-            }),
-            None => 18412,
-        },
-        directories: match DIRS {
-            Some(dirs) => {
-                let dirs = dirs
-                    .split(',')
-                    .map(|str| str.to_string())
-                    .collect::<Vec<String>>();
-
-                dirs
-            }
-            None => vec![
-                "/usr/share/fonts".to_string(),
-                "/usr/lib/share/fonts".to_string(),
-            ],
-        },
-    };
+    let default_config = Config::default();
 
     if let Ok(config) = fs::read(config_path) {
         let json_string = String::from_utf8_lossy(&config);
         let json: Config = serde_json::from_str(&json_string).unwrap_or(default_config);
 
-        return json;
+        return Config::new(json.port, json.directories);
     }
 
     default_config
