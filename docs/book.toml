@@ -2,3 +2,7 @@
 authors = ["Jasper Nykänen"]
 language = "en"
 title = "figmaid"
+
+[output.html]
+git-repository-url = "https://github.com/jqpe/figmaid/"
+edit-url-template = "https://github.com/jqpe/figmaid/edit/main/docs/{path}"
