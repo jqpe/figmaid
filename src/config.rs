@@ -40,7 +40,13 @@ impl Config {
                         .map(|str| str.to_string())
                         .collect::<Vec<String>>();
 
-                    dirs
+                    if dirs.is_empty() || dirs[0].is_empty()  {
+                        eprintln!("Environment variable DIRS was used, but no directories were specified. Using configuration file or default.");
+                        directories
+                    } else {
+                        dirs
+                    }
+
                 }
                 _ => directories,
             },
@@ -80,16 +86,15 @@ impl Default for Config {
 pub fn load_config() -> Config {
     let config_path = Path::new(&home_dir().unwrap()).join(".config/figmaid/figmaid.json");
 
-    let default_config = Config::default();
+    match fs::read(config_path) {
+        Ok(config) => {
+            let json_string = String::from_utf8_lossy(&config);
+            let json: Config = serde_json::from_str(&json_string).unwrap_or_default();
 
-    if let Ok(config) = fs::read(config_path) {
-        let json_string = String::from_utf8_lossy(&config);
-        let json = serde_json::from_str(&json_string).unwrap_or(default_config);
-
-        return Config::new(json.port, json.directories);
+            Config::new(json.port, json.directories)
+        }
+        Err(_) => Config::default(),
     }
-
-    default_config
 }
 
 /// Attempts to load the schema from ./docs/schema.json.
