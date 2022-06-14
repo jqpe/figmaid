@@ -2,7 +2,7 @@ use std::fs;
 
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map};
-use ttf_parser::{fonts_in_collection, name_id, PlatformId};
+use ttf_parser::{fonts_in_collection, name_id};
 use walkdir::WalkDir;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -56,25 +56,35 @@ pub fn extract_font_metadata(data: Vec<u8>) -> Option<serde_json::Value> {
             let mut family = String::new();
             let mut postscript = String::new();
             let mut style = String::new();
+            let mut id = String::new();
 
-            for name in face.names() {
-                match (name.name_id, name.platform_id) {
-                    (name_id::FAMILY, PlatformId::Windows) => {
+            for name in face.names().into_iter().filter(|name| name.is_unicode()) {
+                match name.name_id {
+                    name_id::FAMILY | name_id::TYPOGRAPHIC_FAMILY => {
                         family = name.to_string()?;
+                        style = name.to_string()?;
                     }
-                    (name_id::POST_SCRIPT_NAME, PlatformId::Windows) => {
+                    name_id::POST_SCRIPT_NAME => {
                         postscript = name.to_string()?;
                     }
-                    (name_id::SUBFAMILY, PlatformId::Windows) => {
+                    name_id::SUBFAMILY | name_id::TYPOGRAPHIC_SUBFAMILY => {
                         style = name.to_string()?;
+                    }
+                    name_id::UNIQUE_ID => {
+                        id = name.to_string()?;
                     }
                     _ => {}
                 };
             }
 
+            // This might happen with .woff files.
+            if family == "false" {
+                continue;
+            }
+
             fonts.push(Font {
-                family: family.clone(),
-                id: family,
+                family,
+                id,
                 italic: face.is_italic(),
                 postscript,
                 stretch: 5,
