@@ -85,7 +85,7 @@ fn handle_font_file(req: Request<Body>, response: &mut Response<Body>) {
 fn handle_font_files(config: Config, response: &mut Response<Body>) {
     let font_files: serde_json::Value = load_fonts(config.directories).into();
     let json = json!({
-        "version": 4i8,
+        "version": 20i8,
         "fontFiles": font_files,
     });
     response
