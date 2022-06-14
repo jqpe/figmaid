@@ -97,8 +97,8 @@ pub fn load_config() -> Config {
     }
 }
 
-/// Attempts to load the schema from ./docs/schema.json.
-pub async fn load_schema_json() -> Option<serde_json::Value> {
+/// Attempts to fetch the schema from Github.
+pub async fn fetch_schema() -> Option<serde_json::Value> {
     let https = HttpsConnector::new();
     let client = Client::builder().build::<_, hyper::Body>(https);
 
@@ -130,7 +130,7 @@ pub async fn load_schema_json() -> Option<serde_json::Value> {
 
 /// Validates the configuration. Logs any errors to stderr.
 pub async fn is_config_valid(json: &serde_json::Value) -> bool {
-    match load_schema_json().await {
+    match fetch_schema().await {
         Some(schema) => {
             let compiled = JSONSchema::compile(&schema).expect("A valid schema");
             let validation = compiled.validate(json);
