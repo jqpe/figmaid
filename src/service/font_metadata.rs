@@ -40,7 +40,9 @@ pub fn load_fonts(directories: Vec<String>) -> serde_json::Map<String, serde_jso
         }
     }
 
-    println!("{:?}", errors);
+    if !(errors.is_empty()) {
+        eprintln!("{:?}", errors);
+    }
 
     fonts
 }
