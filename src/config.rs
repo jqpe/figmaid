@@ -107,22 +107,23 @@ pub async fn fetch_schema() -> Option<serde_json::Value> {
         .unwrap();
 
     match client.get(uri).await {
-        Ok(response) => {
-            if let Ok(schema_bytes) = hyper::body::to_bytes(response.into_body()).await {
+        Ok(response) => match hyper::body::to_bytes(response.into_body()).await {
+            Ok(schema_bytes) => {
                 let schema: Result<serde_json::Value, _> =
                     serde_json::from_str(&String::from_utf8(schema_bytes.to_vec()).unwrap());
 
-                if let Ok(schema) = schema {
-                    Some(schema)
-                } else {
-                    None
+                match schema {
+                    Ok(schema) => Some(schema),
+                    Err(_) => None,
                 }
-            } else {
+            }
+            Err(err) => {
+                eprintln!("Couldn't fetch schema: {}", err);
                 None
             }
-        }
+        },
         Err(err) => {
-            eprintln!("Couldn't fetch schema. {}", err);
+            eprintln!("Couldn't fetch schema: {}", err);
             None
         }
     }
