@@ -20,3 +20,8 @@ If you are using Ubuntu/Linux Mint no additional configuration is required if yo
 
 For other Linux distros, refer to their documentation.
 
+## Running in the background
+
+`figmaid > /dev/null &` or use a terminal multiplexer. The server will not be restored when you restart. To stop the server use `pkill -e figmaid`.
+
+This delegates the process to your operating systems [job control](https://en.wikipedia.org/wiki/Job_control_(Unix))
