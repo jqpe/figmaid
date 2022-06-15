@@ -1,4 +1,4 @@
-use clap::{crate_authors, Arg, Command as Cmd};
+use clap::{crate_authors, Command as Cmd};
 use std::fs::File;
 use std::io::{self, stdout, ErrorKind, Write};
 use std::path::{Path, PathBuf};
@@ -8,12 +8,10 @@ use crate::config::{is_config_valid, Config};
 pub fn cli() -> Cmd<'static> {
     Cmd::new("figmaid")
         .about("Web server that allows you to use locally installed fonts in Figma")
-        .arg(Arg::new("s").help("Kill any running instances"))
         .subcommand(
             Cmd::new("config")
                 .about("Create, open and validate configuration")
                 .author(crate_authors!())
-                .arg(Arg::new("-s").help("Kill any running instances"))
                 .subcommand_required(true)
                 .subcommand(Cmd::new("create").about("Create default configuration file"))
                 .subcommand(Cmd::new("validate").about("Validate configuration"))
