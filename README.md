@@ -6,7 +6,7 @@ Web server that allows you to use locally installed fonts in Figma on Linux.
 ## Install
 `cargo install --git https://github.com/jqpe/figmaid` 
 
-To add additional directories ([aside from the default configuration](https://figmaid.nykanen.me/usage.html#configuration)) run `figmaid -t`.  
+To add additional directories ([aside from the default configuration](https://figmaid.nykanen.me/usage.html#configuration)) run `figmaid config create && figmaid config open`.  
 
 NB: the port option is exposed for use with reverse proxies, Figma always requests fonts from localhost:18412.
 
