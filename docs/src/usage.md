@@ -14,7 +14,26 @@ The default configuration looks like this:
 {{#include ../figmaid.json}}
 ```
 
-The configuration file lives in $HOME/.config/figmaid/figmaid.json. Additionally you can use environment variables PORT and DIRS, they will have preference. To validate the configuration run `figmaid -t`, if the configuration doesn't exist it will ask if it should create it for you.
+The configuration file lives in $HOME/.config/figmaid/figmaid.json. Additionally you can use environment variables PORT and DIRS, they will have preference. 
+
+figmaid provides the config subcommand to make working with this file less painful:
+
+```txt
+Create, open and validate configuration
+
+USAGE:
+    figmaid config <SUBCOMMAND>
+
+OPTIONS:
+    -h, --help    Print help information
+
+SUBCOMMANDS:
+    create      Create default configuration file
+    help        Print this message or the help of the given subcommand(s)
+    open        Open configuration file in text editor
+    validate    Validate configuration
+```
+
 
 If you are using Ubuntu/Linux Mint no additional configuration is required if you only wish to use installed fonts. 
 
