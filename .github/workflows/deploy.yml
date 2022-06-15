@@ -1,0 +1,64 @@
+name: Release
+
+defaults:
+  run:
+    shell: bash
+
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+*']
+
+jobs:
+  release:
+    name: Build and Release
+    runs-on: ${{ matrix.os }}-latest
+    strategy:
+      matrix:
+        os: [ubuntu, macos, windows]
+        ext: ['', '.exe']
+        exclude:
+          - os: windows
+            ext: ''
+          - os: ubuntu
+            ext: '.exe'
+          - os: macos
+            ext: '.exe'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build project
+        run: cargo build --release --locked
+
+      - name: Upload binary
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/figmaid${{ matrix.ext }}
+          asset_name: figmaid-${{ matrix.os }}-amd64${{ matrix.ext }}
+          tag: ${{ github.ref }}
+          overwrite: true
+
+  macos_arm:
+    strategy:
+      matrix:
+        features: [default, regex]
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install ARM target
+        run: rustup update && rustup target add aarch64-apple-darwin
+
+      - name: Build ARM
+        run: cargo build --release --target=aarch64-apple-darwin --locked
+
+      - name: Upload binary
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/figmaid
+          asset_name: figmaid-macos-aarch64
+          tag: ${{ github.ref }}
+          overwrite: true
