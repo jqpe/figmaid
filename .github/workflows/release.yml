@@ -55,7 +55,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/arm64-apple-darwin/release/figmaid
+          file: target/aarch64-apple-darwin/release/figmaid
           asset_name: figmaid-macos-aarch64
           tag: ${{ github.ref }}
           overwrite: true
