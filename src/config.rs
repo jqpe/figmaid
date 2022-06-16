@@ -1,8 +1,6 @@
 //! Provides utilies for validating and loading the configuration file in addition to providing a default implementation.
 
 use home::home_dir;
-use hyper::Client;
-use hyper_tls::HttpsConnector;
 use jsonschema::JSONSchema;
 use serde::{Deserialize, Serialize};
 use serde_json::json;
@@ -97,42 +95,15 @@ pub fn load_config() -> Config {
     }
 }
 
-/// Attempts to fetch the schema from Github.
-pub async fn fetch_schema() -> Option<serde_json::Value> {
-    let https = HttpsConnector::new();
-    let client = Client::builder().build::<_, hyper::Body>(https);
-
-    let uri = "https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json"
-        .parse()
-        .unwrap();
-
-    match client.get(uri).await {
-        Ok(response) => match hyper::body::to_bytes(response.into_body()).await {
-            Ok(schema_bytes) => {
-                let schema: Result<serde_json::Value, _> =
-                    serde_json::from_str(&String::from_utf8(schema_bytes.to_vec()).unwrap());
-
-                match schema {
-                    Ok(schema) => Some(schema),
-                    Err(_) => None,
-                }
-            }
-            Err(err) => {
-                eprintln!("Couldn't fetch schema: {}", err);
-                None
-            }
-        },
-        Err(err) => {
-            eprintln!("Couldn't fetch schema: {}", err);
-            None
-        }
-    }
+/// Load schema from docs/schema.json
+pub fn load_schema() -> Result<serde_json::Value, serde_json::Error> {
+    serde_json::from_str(include_str!("../docs/schema.json"))
 }
 
 /// Validates the configuration. Logs any errors to stderr.
 pub async fn is_config_valid(json: &serde_json::Value) -> bool {
-    match fetch_schema().await {
-        Some(schema) => {
+    match load_schema() {
+        Ok(schema) => {
             let compiled = JSONSchema::compile(&schema).expect("A valid schema");
             let validation = compiled.validate(json);
 
@@ -146,8 +117,8 @@ pub async fn is_config_valid(json: &serde_json::Value) -> bool {
 
             true
         }
-        None => {
-            eprintln!("Couldn't load schema.");
+        Err(err) => {
+            eprintln!("Couldn't load schema. {:?}", err);
             false
         }
     }

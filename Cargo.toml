@@ -9,8 +9,7 @@ edition = "2021"
 [dependencies]
 clap = {version = "3.1.18", features= ["default", "cargo"]}
 home = "0.5.3"
-hyper = { version = "0.14.19", features = ["server", "http1","runtime","client"] } 
-hyper-tls = "0.5.0"
+hyper = { version = "0.14.19", features = ["server", "http1","runtime"] } 
 jsonschema = "0.16.0"
 opener = "0.5.0"
 regex = "1.5.6"
