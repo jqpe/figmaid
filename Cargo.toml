@@ -1,6 +1,6 @@
 [package]
 name = "figmaid"
-version = "0.2.0"
+version = "0.3.0"
 authors=["Jasper Nykänen <nykanen@hey.com>"]
 edition = "2021"
 
