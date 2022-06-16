@@ -40,9 +40,6 @@ jobs:
           overwrite: true
 
   macos_arm:
-    strategy:
-      matrix:
-        features: [default, regex]
     runs-on: macos-latest
 
     steps:
