@@ -4,6 +4,8 @@ Web server that allows you to use locally installed fonts in Figma on Linux.
 
 
 ## Install
+For *nix operating systems: `curl -fsSL https://raw.githubusercontent.com/jqpe/figmaid/main/install.sh | sh`
+
 `cargo install --git https://github.com/jqpe/figmaid` 
 
 To add additional directories ([aside from the default configuration](https://figmaid.nykanen.me/usage.html#configuration)) run `figmaid config create && figmaid config open`.  
