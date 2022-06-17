@@ -1,8 +1,24 @@
 # Usage
 
-Install with Cargo:
+On *nix operating systems you can use the installation script.
+
+`curl -fsSL https://raw.githubusercontent.com/jqpe/figmaid/main/install.sh | sh`
+
+| target                   | binary name               | install script |
+| :----------------------- | ------------------------- | -------------- |
+| x86_64-apple-darwin      | figmaid-macos-amd64       | ✓              |
+| aarch64-apple-darwin     | figmaid-macos-aarch64     | ✓              |
+| x86_64-unknown-linux-gnu | figmaid-ubuntu-amd64      | ✓              |
+| x86_64-pc-windows-gnu    | figmaid-windows-amd64.exe | ⚠              |
+
+<br/>
+<br/>
+
+If you are using Windows or an unsupported architecture you need to [install Rust](https://www.rust-lang.org/tools/install) and build from source.
 
 `cargo install --git https://github.com/jqpe/figmaid` 
+
+---
 
 After the installation is complete you have `figmaid` ready to go!
 
@@ -35,9 +51,18 @@ SUBCOMMANDS:
 ```
 
 
-If you are using Ubuntu/Linux Mint no additional configuration is required if you only wish to use installed fonts. 
+If you are using Ubuntu, Linux Mint, macOS or Windows no additional configuration is required if you only wish to use installed fonts. 
 
 For other Linux distros, refer to their documentation.
+
+> **Custom directories** figmaid doesn't care about where your font files are located or whether they're installed or not.
+> To add a custom directory, specify it in `directories`.
+> The path to the directory doesn't need to be absolute, if you have fonts in /Design/fonts/<sub_folder>/**/* you can just specify /Design/fonts.
+
+## Note about directories
+
+1. The directory path doesn't have to be absolute, but operating system dependent shortcuts like the tilde ~ are not supported.
+2. figmaid has to have access to the directory. This usually means that the user that installed figmaid has to have access.
 
 ## Running in the background
 
