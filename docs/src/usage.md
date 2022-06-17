@@ -14,6 +14,9 @@ On *nix operating systems you can use the installation script. See the table bel
 <br/>
 <br/>
 
+> Although figmaid supports Windows/macOS you're probably better off using [Figma Agent](https://help.figma.com/hc/en-us/articles/360039956894-Access-local-fonts-on-your-computer#browser) unless you need custom directories.
+> If you only intend on using installed fonts, Figma Agent will pick those up.
+
 If you are using Windows or an unsupported architecture you need to [install Rust](https://www.rust-lang.org/tools/install) and build from source.
 
 `cargo install --git https://github.com/jqpe/figmaid` 

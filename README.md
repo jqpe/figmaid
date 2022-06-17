@@ -12,9 +12,6 @@ To add additional directories ([aside from the default configuration](https://fi
 
 NB: the port option is exposed for use with reverse proxies, Figma always requests fonts from localhost:18412.
 
-> Although figmaid supports Windows/macOS you're probably better off using [Figma Agent](https://help.figma.com/hc/en-us/articles/360039956894-Access-local-fonts-on-your-computer#browser) unless you need custom directories.
-> If you only intend on using installed fonts, Figma Agent will pick those up.
-
 The default configuration will use directories for Windows/macOS/Ubuntu. For other Linux distros check your [font configuration file](https://linux.die.net/man/5/fonts-conf).
   
 To start the web server run `figmaid` and you should see a log about figmaid being running on port 18412.
