@@ -66,10 +66,26 @@ impl Default for Config {
     fn default() -> Self {
         Config::new(
             18412,
-            vec![
-                "/usr/share/fonts".to_string(),
-                "/usr/lib/share/fonts".to_string(),
-            ],
+            match env::consts::OS {
+                "windows" => {
+                    vec![r"c:\Windows\Fonts".to_string()]
+                }
+                "macos" => {
+                    let mut macos = vec!["/Library/Fonts/".to_string()];
+
+                    if let Some(home_dir) = home_dir() {
+                        macos.push(format!("{}/Library/Fonts/", home_dir.to_str().unwrap()));
+                    };
+
+                    macos
+                }
+                _ => {
+                    vec![
+                        "/usr/share/fonts".to_string(),
+                        "/usr/local/share/fonts".to_string(),
+                    ]
+                }
+            },
         )
     }
 }
