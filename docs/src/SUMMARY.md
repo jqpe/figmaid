@@ -5,3 +5,4 @@
 
 - [Troubleshooting](./troubleshooting/readme.md)
   - [My fonts are not showing up](./troubleshooting/fonts-not-showing-up.md)
+  - [AddrInUse](./troubleshooting/addr-in-use.md)
