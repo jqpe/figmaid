@@ -1,6 +1,6 @@
 # Usage
 
-On *nix operating systems you can use the installation script.
+On *nix operating systems you can use the installation script. See the table below for supported architectures.
 
 `curl -fsSL https://raw.githubusercontent.com/jqpe/figmaid/main/install.sh | sh`
 
