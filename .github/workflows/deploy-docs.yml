@@ -29,6 +29,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script_stop: true # Stop executing on first failure.
           script: |
-            cd /var/www/figmaid/
+            cd /usr/src/figmaid/
             git fetch origin main
             git reset --hard FETCH_HEAD
+            cd docs && mdbook build -d /var/www/figmaid
