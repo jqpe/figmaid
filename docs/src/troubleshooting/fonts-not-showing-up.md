@@ -1,8 +1,8 @@
 # My fonts are not showing up
 
-Check that you have the server running: `sudo netstat -ltnp | grep figmaid`, or with lsof: `sudo lsof | grep '18412'`
+Check that you have the server running: `sudo netstat -l | grep 18412`, or with ss: `sudo ss -l | grep 18412`
    
-If it prints nothing, start the server with `figmaid`. 
+If it prints nothing, start the server with `figmaid`. At this point if `figmaid` panics with `AddrInUse`, see [relevant docs](addr-in-use.md).
 
 If it prints something, but you are still not seeing your fonts:
 
@@ -10,5 +10,8 @@ If it prints something, but you are still not seeing your fonts:
 2. Reload Figma. Figma requests fonts when it's initialized and adding new fonts requires a refresh.
 3. Run `figmaid config validate` to check that your configuration file is valid. If you accidentally mispelled something figmaid will fallback to the default configuration.
    -  For a quick fix run DIRS=/your/directory figmaid
-4. If all else fails, the font might not have correct tables. I'd apprecatiate if you'd take the time to open a issue with the font file included.
+4. Run `figmaid config open` and check that you specified the correct directory.  
+5. If all else fails, the font might not have correct tables. I'd apprecatiate if you'd take the time to open a issue with the font file included.
 
+figmaid figures out the font family by looking at it's metadata. In some cases the font family and filename don't match — 
+in this case you should install the font and then open it in your platform's GUI and see what the font family actually is. 
