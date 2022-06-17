@@ -10,9 +10,6 @@ To add additional directories ([aside from the default configuration](https://fi
 
 NB: the port option is exposed for use with reverse proxies, Figma always requests fonts from localhost:18412.
 
-macOS includes user fonts in ~/Library/Fonts/ and system fonts in /Library/Fonts.
-Windows has all fonts inside C:\Windows\Fonts.
-
 > Although figmaid supports Windows/macOS you're probably better off using [Figma Agent](https://help.figma.com/hc/en-us/articles/360039956894-Access-local-fonts-on-your-computer#browser) unless you need custom directories.
 > If you only intend on using installed fonts, Figma Agent will pick those up.
 
