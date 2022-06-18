@@ -1,0 +1,3 @@
+# `figmaid`
+
+Spawns the server.
