@@ -2,14 +2,28 @@
 
 use home::home_dir;
 use jsonschema::JSONSchema;
-use serde::{Deserialize, Serialize};
+use serde::{ser::SerializeStruct, Deserialize, Serialize};
 use serde_json::json;
 use std::{env, fs, path::Path};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize)]
 pub struct Config {
+    schema: String,
     pub port: u16,
     pub directories: Vec<String>,
+}
+
+impl Serialize for Config {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let mut s = serializer.serialize_struct("Config", 3)?;
+        s.serialize_field("$schema", &self.schema)?;
+        s.serialize_field("port", &self.port)?;
+        s.serialize_field("directories", &self.directories)?;
+        s.end()
+    }
 }
 
 impl From<&Config> for serde_json::Value {
@@ -21,6 +35,7 @@ impl From<&Config> for serde_json::Value {
 impl Config {
     pub fn new(port: u16, directories: Vec<String>) -> Self {
         Self {
+            schema: String::from("https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json"),
             port: match env::var("PORT") {
                 Ok(port) => port.parse().unwrap_or_else(|err| {
                     eprintln!(
