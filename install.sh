@@ -2,10 +2,22 @@
 
 set -e
 
-case $(uname -sm) in
+platform="$(uname -sm)"
+
+echo_error() {
+	echo >&2 "$1 is not supported by the install script, \
+see https://figmaid.nykanen.me/install.html on how to build from source"
+}
+
+if [ "$OS" = "Windows_NT" ]; then
+	echo_error "$OS" && exit 1
+fi
+
+case $platform in
 "Darwin x86_64") target="macos-amd64" ;;
 "Darwin arm64") target="macos-aarch64" ;;
-*) target="ubuntu-amd64" ;;
+"Linux x86_64") target="ubuntu-amd64" ;;
+*) echo_error "$platform" && exit 1 ;;
 esac
 
 dirname="$HOME/.local/bin"
