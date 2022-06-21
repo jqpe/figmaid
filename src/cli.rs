@@ -92,7 +92,33 @@ pub fn create(force: bool) {
                 );
             }
             Err(err) => {
-                eprintln!("Couldn't create configuration file: {}", err);
+                let home = home::home_dir().expect("Couldn't get home directory");
+
+                let dotconfig = Path::join(&home, ".config");
+                let figmaid = Path::join(&dotconfig, "figmaid");
+
+                let panic_on_create_err = |path: &str| panic!("Couldn't create {:#?}", path);
+
+                let (dotconfigerr, figmaiderr) = (
+                    File::open(&dotconfig).is_err(),
+                    File::open(&figmaid).is_err(),
+                );
+
+                if dotconfigerr {
+                    std::fs::create_dir(&dotconfig)
+                        .unwrap_or_else(|_| panic_on_create_err(dotconfig.to_str().unwrap()));
+                }
+
+                if figmaiderr {
+                    std::fs::create_dir(&figmaid)
+                        .unwrap_or_else(|_| panic_on_create_err(figmaid.to_str().unwrap()));
+                }
+
+                if figmaiderr || dotconfigerr {
+                    return create(false);
+                }
+
+                eprintln!("Couldn't create configuration file: {:?}", err);
             }
         },
     }
