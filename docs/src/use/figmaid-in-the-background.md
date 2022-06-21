@@ -16,7 +16,7 @@ Verify that process started successfully by running `pm2 ls`.
 
 To see how to manage the process refer to [pm2's documentation](https://pm2.keymetrics.io/).
 
-> Pm2 "daemonizes" figmaid so it will be restored even if you reboot. pm2 is simple to use and works on Windows, macOS and Linux.
+> Pm2 can [persist your applications](https://pm2.keymetrics.io/docs/usage/startup/) so they will be restarted when you reboot, similar how to how container restart policies work in Docker. 
 
 ### Some useful commands
 
