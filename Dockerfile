@@ -11,4 +11,5 @@ ENV HOST=0.0.0.0
 
 EXPOSE 18412
 
+RUN ["figmaid", "config", "create"]
 CMD ["sh", "-c", "HOST=${HOST} figmaid"]
