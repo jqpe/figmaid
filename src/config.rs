@@ -4,12 +4,13 @@ use home::home_dir;
 use jsonschema::JSONSchema;
 use serde::{ser::SerializeStruct, Deserialize, Serialize};
 use serde_json::json;
-use std::{env, fs, path::Path};
+use std::{env, fs, net::Ipv4Addr, path::Path, str::FromStr};
 
 #[derive(Deserialize)]
 pub struct Config {
     schema: String,
     pub port: u16,
+    pub host: Ipv4Addr,
     pub directories: Vec<String>,
 }
 
@@ -45,6 +46,10 @@ impl Config {
                     18412
                 }),
                 _ => port,
+            },
+            host: match env::var("HOST") {
+                Ok(host) => Ipv4Addr::from_str(host.as_str()).unwrap_or(Ipv4Addr::LOCALHOST),
+                Err(_) => Ipv4Addr::LOCALHOST
             },
             directories: match env::var("DIRS") {
                 Ok(dirs) => {

@@ -3,14 +3,14 @@
 use hyper::service::{make_service_fn, service_fn};
 use hyper::Server;
 use std::convert::Infallible;
-use std::net::{Ipv4Addr, SocketAddr};
+use std::net::SocketAddr;
 
 use crate::config::load_config;
 use crate::service::figma;
 
 pub async fn start_server() {
     let config = load_config();
-    let addr = SocketAddr::from((Ipv4Addr::LOCALHOST, config.port));
+    let addr = SocketAddr::from((config.host, config.port));
     let figma = make_service_fn(|_conn| async { Ok::<_, Infallible>(service_fn(figma)) });
     let server = Server::try_bind(&addr);
 

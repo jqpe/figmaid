@@ -1,5 +1,10 @@
 # Install
 
+There's three ways you can install figmaid
+1. With the installation script on supported platforms
+2. Building from source
+3. Using the Docker image, documented in [figmaid in docker](./use/docker-image.md)
+
 On *nix operating systems you can use the installation script. See the table below for supported architectures.
 
 ```sh
