@@ -27,7 +27,7 @@ CONTAINER ID   IMAGE             COMMAND                  CREATED      STATUS   
 c07e070bb470   nykanen/figmaid   "sh -c 'HOST=${HOST}…"   0 days ago   Up 0 hours   0.0.0.0:18412->18412/tcp, :::18412->18412/tcp
 ```
 
-Take note of the PORTS value. 0.0.0.0:18412 is available from 18412/tcp on your local machine. To make sure that everything really went as expected, open http://localhost:18412/figma/font-files on a browser and you should get a big blob of JSON.
+Take note of the PORTS value. 0.0.0.0:18412 is available from 18412/tcp on your local machine. To make sure that everything really went as expected, open http://localhost:18412/figma/font-files on a browser and you should get a big chunk of JSON.
 
 ## Adding additional directories
 
@@ -47,3 +47,25 @@ nykanen/figmaid
 ```
 
 Above we bound the default directory for downloaded files on Ubuntu to `/root/Downloads`. Remember to add this directory to your configuration file by editing `/home/$user/.config/figmaid/figmaid.json` and add the directory for *what the directory path is inside the container*. In this case our configuration file would contain the following directories: `/usr/share/fonts` and `/root/Downloads`.
+
+## Verify that directories are included
+
+After adding directories it would be nice to know they actually are picked up by figmaid. Fortunately this is not that big of a checklist, and often you would do this only once, never having to think about it again.
+
+To get a list of all mounts inside a container use
+
+```sh
+docker inspect figmaid --format "{{range .Mounts}}{{ .Source }} -> {{ .Destination }}
+{{ end }}"
+```
+
+You should get an output similar to below:
+
+```txt
+/usr/share/fonts -> /usr/share/fonts
+/home/$user/.config/figmaid/figmaid.json -> /root/.config/figmaid/figmaid.json
+```
+
+The lefthand side is the directory on your host machine. This would contain your configuration file and font directories. The righthand side is what the path is inside the container. Therefore it's also the path you should have in your configuration file.
+
+Let's verify this next. Open your configuration file on your host machine (whatever is on the lefthand side of -> /root/.config/figmaid/figmaid.json.) As introduced in [configuration](../configuration.md), the directories property lets you specify additional directories. In the above example we want to include the righthand side of /usr/share/fonts, which just happens to be /usr/share/fonts, but it could be anything! After ensuring that you're using the correct directories, and checking that the configuration is valid (`docker exec -it figmaid "figmaid config validate"`), all there is left to do is refresh Figma, if open. You can also run `docker exec -it figmaid config` to list loaded directories. 
