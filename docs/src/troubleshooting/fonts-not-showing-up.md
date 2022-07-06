@@ -11,7 +11,8 @@ If it prints something, but you are still not seeing your fonts:
 3. Run `figmaid config validate` to check that your configuration file is valid. If you accidentally mispelled something figmaid will fallback to the default configuration.
    -  For a quick fix run DIRS=/your/directory figmaid
 4. Run `figmaid config open` and check that you specified the correct directory.  
-5. If all else fails, the font might not have correct tables. I'd apprecatiate if you'd take the time to open a issue with the font file included.
+5. Run `figmaid config`, this lists all directories and amount of loaded font files per directory. If you want to be extra spicy you can specify an absolute path to the direct parent of your font file with `DIRS=/my/fontdir figmaid config`. If figmaid picked up some fonts from this directory it would print your directory path followed by amount of fonts greater than zero.
+6. If all else fails, the font might not have correct tables. I'd apprecatiate if you'd take the time to open a issue with the font file included.
 
 figmaid figures out the font family by looking at it's metadata. In some cases the font family and filename don't match — 
 in this case you should install the font and then open it in your platform's GUI and see what the font family actually is. 
