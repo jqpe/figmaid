@@ -9,7 +9,7 @@ Figma allows local fonts through a background service they call FigmaAgent.
 It works by establishing a web server with a sole purpose of serving locally installed fonts and a single index file with metadata about these fonts.
 
 It comes with some limitations though, most importantly the platform support, or lack thereof.
-FigmaAgent currently only supports Windows and macOS, but figmaid has no assumptions on where you run it.
+FigmaAgent currently only supports Windows and macOS, but figmaid has minimal assumptions on where you run it.
 
 Here's what Figma does when you load a document:
 1. Request index file from localhost (that's your computer!)
