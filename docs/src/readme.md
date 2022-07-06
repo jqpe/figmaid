@@ -1,6 +1,6 @@
 # Introduction
 
-Figmaid is a simple web server that serves locally installed files to Figma.
+figmaid is a simple web server that serves locally installed files to Figma.
 
 
 ## How does it work? (in a nutshell)
@@ -17,7 +17,7 @@ Here's what Figma does when you load a document:
 3. If user uses one of these fonts get the file
 
 
-Figmaid is a workhorse. It eats fonts and spits out their metadata simply by walking through your directories (platform defaults, and any you specify in [configuration](./configuration.md)), parses font tables and creates the index file. 
+figmaid is a workhorse. It eats fonts and spits out their metadata simply by walking through your directories (platform defaults, and any you specify in [configuration](./configuration.md)), parses font tables and creates the index file. 
 
 
 ## In practice

@@ -1,6 +1,6 @@
 # Running figmaid in the background
 
-Figmaid doesn't run in the background by default. You can configure this yourself if you need it.
+figmaid doesn't run in the background by default. You can configure this yourself if you need it.
 
 ## Docker
 

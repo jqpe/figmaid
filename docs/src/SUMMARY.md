@@ -10,7 +10,7 @@
   - [`figmaid config`](./cli/figmaid-config.md)
 
 - [Usage](./use/readme.md)
-  - [Figmaid in the background](./use/figmaid-in-the-background.md)
+  - [figmaid in the background](./use/figmaid-in-the-background.md)
   - [figmaid in Docker](./use/docker-image.md)
 
 - [Troubleshooting](./troubleshooting/readme.md)
