@@ -1,4 +1,4 @@
-use figmaid::{cli::*, server::start_server};
+use figmaid::{cli::*, config::load_config, server::start_server, service::font_metadata};
 
 #[tokio::main]
 async fn main() {
@@ -14,7 +14,17 @@ async fn main() {
                     validate().await;
                 }
                 Some(("open", _)) => open(),
-                _ => {}
+                _ => {
+                    let config = load_config();
+
+                    println!("port {} ", config.port);
+
+                    for dir in &config.directories {
+                        let fonts = font_metadata::load_fonts(vec![dir.to_string()]);
+
+                        println!("{}: {} fonts", dir, fonts.len())
+                    }
+                }
             };
         }
         Some((&_, _)) => {}
