@@ -10,7 +10,7 @@ use crate::service::figma;
 
 pub async fn start_server() {
     let config = load_config();
-    let addr = SocketAddr::from((config.host, config.port));
+    let addr = SocketAddr::from((config.host.unwrap(), config.port));
     let figma = make_service_fn(|_conn| async { Ok::<_, Infallible>(service_fn(figma)) });
     let server = Server::try_bind(&addr);
 

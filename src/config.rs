@@ -8,9 +8,9 @@ use std::{env, fs, net::Ipv4Addr, path::Path, str::FromStr};
 
 #[derive(Deserialize)]
 pub struct Config {
-    schema: String,
+    schema: Option<String>,
     pub port: u16,
-    pub host: Ipv4Addr,
+    pub host: Option<Ipv4Addr>,
     pub directories: Vec<String>,
 }
 
@@ -36,7 +36,7 @@ impl From<&Config> for serde_json::Value {
 impl Config {
     pub fn new(port: u16, directories: Vec<String>) -> Self {
         Self {
-            schema: String::from("https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json"),
+            schema: Some(String::from("https://raw.githubusercontent.com/jqpe/figmaid/main/docs/schema.json")),
             port: match env::var("PORT") {
                 Ok(port) => port.parse().unwrap_or_else(|err| {
                     eprintln!(
@@ -48,8 +48,8 @@ impl Config {
                 _ => port,
             },
             host: match env::var("HOST") {
-                Ok(host) => Ipv4Addr::from_str(host.as_str()).unwrap_or(Ipv4Addr::LOCALHOST),
-                Err(_) => Ipv4Addr::LOCALHOST
+                Ok(host) => Some(Ipv4Addr::from_str(host.as_str()).unwrap_or(Ipv4Addr::LOCALHOST)),
+                Err(_) => Some(Ipv4Addr::LOCALHOST)
             },
             directories: match env::var("DIRS") {
                 Ok(dirs) => {
@@ -123,7 +123,10 @@ pub fn load_config() -> Config {
     match fs::read(config_path) {
         Ok(config) => {
             let json_string = String::from_utf8_lossy(&config);
-            let json: Config = serde_json::from_str(&json_string).unwrap_or_default();
+            let json: Config = serde_json::from_str(&json_string).unwrap_or_else(|err| {
+                eprint!("couldn't load configuration file: {}", err);
+                Config::default()
+            });
 
             Config::new(json.port, json.directories)
         }
