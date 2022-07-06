@@ -22,6 +22,6 @@ pub async fn start_server() {
                 eprintln!("server error: {}", e);
             }
         }
-        Err(err) => panic!("{:?}", err),
+        Err(e) => panic!("{:?}", e),
     }
 }

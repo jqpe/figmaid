@@ -44,14 +44,14 @@ pub async fn validate() {
                 println!("Configuration is not valid JSON.")
             }
         }
-        Err(err) => {
-            if err.kind() == ErrorKind::NotFound {
+        Err(e) => {
+            if e.kind() == ErrorKind::NotFound {
                 eprintln!(
                     "Validation failed because the configuration file hasn't been created.\
                    \n-> run `figmaid config create` to create it."
                 )
             } else {
-                eprintln!("Couldn't validate because of io error: {}", err)
+                eprintln!("Couldn't validate because of io error: {}", e)
             }
         }
     }
@@ -93,12 +93,12 @@ pub fn create(force: bool) {
                     }
                 );
             }
-            Err(err) => {
-                if err.kind() == ErrorKind::NotFound {
+            Err(e) => {
+                if e.kind() == ErrorKind::NotFound {
                     return create_missing_dirs();
                 };
 
-                eprintln!("Couldn't create configuration file: {:?}", err);
+                eprintln!("Couldn't create configuration file: {:?}", e);
             }
         },
     }
@@ -143,7 +143,7 @@ pub fn open() {
         return;
     }
 
-    if let Err(err) = opener::open(config_path) {
-        eprintln!("Couldn't open configuration file {}", err)
+    if let Err(e) = opener::open(config_path) {
+        eprintln!("Couldn't open configuration file {}", e)
     }
 }

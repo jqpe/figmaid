@@ -156,8 +156,8 @@ pub async fn is_config_valid(json: &serde_json::Value) -> bool {
 
             true
         }
-        Err(err) => {
-            eprintln!("Couldn't load schema. {:?}", err);
+        Err(e) => {
+            eprintln!("Couldn't load schema. {:?}", e);
             false
         }
     }
