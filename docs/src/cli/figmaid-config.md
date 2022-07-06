@@ -5,6 +5,8 @@ This command provides some handy commands to make working with the configuration
 ```txt
 Create, open and validate configuration
 
+Run without subcommands to print current directories and amount of loaded fonts
+
 USAGE:
     figmaid config <SUBCOMMAND>
 
