@@ -11,7 +11,7 @@ pub struct Font {
     pub id: String,
     pub italic: bool,
     pub postscript: String,
-    pub stretch: i8,
+    pub stretch: u16,
     pub style: String,
     pub weight: u16,
 }
@@ -87,7 +87,7 @@ pub fn extract_font_metadata(data: Vec<u8>) -> Option<serde_json::Value> {
                 id,
                 italic: face.is_italic(),
                 postscript,
-                stretch: 5,
+                stretch: face.width().to_number(),
                 style,
                 weight: face.weight().to_number(),
             })
