@@ -88,7 +88,7 @@ impl Default for Config {
             18412,
             match env::consts::OS {
                 "windows" => {
-                    vec![r"c:\Windows\Fonts".to_string()]
+                    vec![r"C:\Windows\Fonts".to_string()]
                 }
                 "macos" => {
                     let mut macos = vec!["/Library/Fonts/".to_string()];
