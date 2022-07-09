@@ -33,7 +33,7 @@ Take note of the PORTS value. 0.0.0.0:18412 is available from 18412/tcp on your 
 
 Simply changing your configuration file is not enough, you must bind the directory from your host to the container. If you find you're adding a lot of directories, you can use figmaid's ability to walk directories. If you have fonts in $HOME/design/fonts and $HOME/Downloads specifying just $HOME might be the way to go. This is not free though — figmaid would walk _all_ directories in $HOME — so pick a good middleground, unfortunately this is up to you to figure out. 
 
-To add new bind mounts to figmaid you must first delete the first iteration, e.g. `docker kill figmaid -f` then create a new container with the additional bind mount:
+To add new bind mounts to figmaid you must first delete the first iteration, e.g. `docker rm -f figmaid` then create a new container with the additional bind mount:
 
 ```sh
 user="$(whoami)"
