@@ -1,6 +1,6 @@
 # figmaid in Docker
 
-You can also run figmaid inside a container. This comes with obvious benefits such as Docker's restart policies, which means you don't need to restart figmaid each time you login. The minor caveat is that specifying additional directories is more of a chore and the container includes an operating system, adding roughly 50MB.
+You can also run figmaid inside a container. This comes with obvious benefits such as Docker's restart policies, which let you delegate restarting figmaid to Docker so you don't have to. The minor caveat is that specifying additional directories is more of a chore and the container includes an operating system, adding roughly 50MB.
 
 Nevertheless, the benefits overshadow the caveats here for most people. Let's see it! 
 
