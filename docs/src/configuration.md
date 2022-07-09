@@ -1,6 +1,6 @@
 # Configuration
 
-The default configuration looks like this: 
+The default configuration looks like below if you're on Linux, for macOS the directories property defaults to `/Library/Fonts` and `~/Library/Fonts`, for Windows `C:\Windows\Fonts`.
 
 ```json
 {{#include ../figmaid.json}}
