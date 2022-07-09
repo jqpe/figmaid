@@ -6,7 +6,7 @@ figmaid is a simple web server that serves locally installed files to Figma.
 ## How does it work? (in a nutshell)
 
 Figma allows local fonts through a background service they call FigmaAgent.
-It works by establishing a web server with a sole purpose of serving locally installed fonts and a single index file with metadata about these fonts.
+It works by establishing a web server with two jobs: serving locally installed fonts and a single index file with metadata about these fonts.
 
 It comes with some limitations though, most importantly the platform support, or lack thereof.
 FigmaAgent currently only supports Windows and macOS, but figmaid has minimal assumptions on where you run it.
