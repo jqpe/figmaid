@@ -45,6 +45,7 @@ jobs:
           overwrite: true
 
   macos_arm:
+    needs: ci
     runs-on: macos-latest
 
     steps:
@@ -66,6 +67,7 @@ jobs:
           overwrite: true
 
   docker_image:
+    needs: ci
     runs-on: ubuntu-latest
 
     steps:
@@ -86,4 +88,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/figmaid:latest
+          tags: nykanen/figmaid:latest,nykanen/figmaid
