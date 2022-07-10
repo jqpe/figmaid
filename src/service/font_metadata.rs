@@ -1,5 +1,6 @@
 use std::fs;
 
+use regex::Regex;
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Map};
 use ttf_parser::{fonts_in_collection, name_id};
@@ -22,11 +23,18 @@ pub fn load_fonts(directories: Vec<String>) -> serde_json::Map<String, serde_jso
     let mut fonts = Map::new();
     let mut errors: Vec<walkdir::Error> = vec![];
 
+    let re = Regex::new(r"\.(otf|ttf|otc|ttc)$").unwrap();
+
     for dir in directories {
         for entry in WalkDir::new(dir) {
             match entry {
                 Ok(entry) => {
                     let path = entry.path().to_str().unwrap();
+
+                    if !re.is_match(path) {
+                        continue;
+                    }
+
                     let data = fs::read(path);
 
                     if let Ok(data) = data {
