@@ -4,7 +4,11 @@
   "properties": {
     "directories": {
       "description": "Directories to load font files from.",
-      "default": ["/usr/local/share/fonts", "/usr/share/fonts"],
+      "default": [
+        "/usr/local/share/fonts",
+        "/usr/share/fonts",
+        "~/.local/share/fonts"
+      ],
       "type": "array",
       "minItems": 1,
       "items": {

@@ -100,10 +100,19 @@ impl Default for Config {
                     macos
                 }
                 _ => {
-                    vec![
+                    let mut linux = vec![
                         "/usr/share/fonts".to_string(),
                         "/usr/local/share/fonts".to_string(),
-                    ]
+                    ];
+
+                    if let Some(home_dir) = home_dir() {
+                        linux.push(format!(
+                            "{}/.local/share/fonts/",
+                            home_dir.to_str().unwrap()
+                        ));
+                    };
+
+                    linux
                 }
             },
         )
