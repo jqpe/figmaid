@@ -1,7 +1,11 @@
-# `figmaid config`
+# Command-line interface
 
-This command provides some handy commands to make working with the configuration file simple.
+figmaid has a small CLI to perform common tasks. It ships as a single executable with a single subcommand to work with the configuration.
 
+## `figmaid`
+  Starts the server. It starts on the foreground by default.
+
+## `figmaid config`
 ```txt
 Create, open and validate configuration
 

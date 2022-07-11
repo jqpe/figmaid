@@ -5,9 +5,7 @@
 - [Install](./install.md)
 - [Configuration](./configuration.md)
 
-- [Command line interface](./cli/readme.md)
-  - [`figmaid`](./cli/figmaid.md)
-  - [`figmaid config`](./cli/figmaid-config.md)
+- [Command line interface](./cli.md)
 
 - [Usage](./use/readme.md)
   - [figmaid in the background](./use/figmaid-in-the-background.md)

@@ -1,3 +1,0 @@
-# `figmaid`
-
-Starts the server.
