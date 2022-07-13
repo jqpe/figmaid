@@ -7,15 +7,13 @@
 //! Attempt to access other routes is considered an error from the user (should be Figma)
 //! and Bad Request is sent as a status code with empty body.
 
-pub mod font_metadata;
-
 use hyper::{body::Bytes, header::HeaderValue, Body, Method, Request, Response, StatusCode};
 use regex::Regex;
 use serde_json::json;
 use std::{convert::Infallible, fs};
 use url::Url;
 
-use font_metadata::load_fonts;
+use crate::font_metadata::load_fonts;
 
 use crate::config::{load_config, Config};
 

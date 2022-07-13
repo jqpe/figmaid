@@ -1,4 +1,4 @@
-use figmaid::{cli::*, config::load_config, server::start_server, service::font_metadata};
+use figmaid::{cli::*, config::load_config, font_metadata, server::start_server};
 
 #[tokio::main]
 async fn main() {
