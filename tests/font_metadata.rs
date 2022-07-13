@@ -1,4 +1,4 @@
-use figmaid::service::font_metadata;
+use figmaid::font_metadata;
 use ttf_parser::Width;
 
 #[test]
