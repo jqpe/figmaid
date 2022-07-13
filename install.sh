@@ -1,12 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
 platform="$(uname -sm)"
 
 echo_error() {
-	echo >&2 "$1 is not supported by the install script, \
-see https://figmaid.nykanen.me/install.html on how to build from source"
+	echo >&2 "Figmaid doesn't support $1 at the moment, \
+see https://figmaid.nykanen.me/use/docker-image.html on how to use the Docker image on platforms other than Linux."
 }
 
 if [ "$OS" = "Windows_NT" ]; then
@@ -14,8 +14,6 @@ if [ "$OS" = "Windows_NT" ]; then
 fi
 
 case $platform in
-"Darwin x86_64") target="macos-amd64" ;;
-"Darwin arm64") target="macos-aarch64" ;;
 "Linux x86_64") target="ubuntu-amd64" ;;
 *) echo_error "$platform" && exit 1 ;;
 esac
