@@ -84,38 +84,21 @@ impl ToString for Config {
 
 impl Default for Config {
     fn default() -> Self {
-        Config::new(
-            18412,
-            match env::consts::OS {
-                "windows" => {
-                    vec![r"C:\Windows\Fonts".to_string()]
-                }
-                "macos" => {
-                    let mut macos = vec!["/Library/Fonts/".to_string()];
+        Config::new(18412, {
+            let mut linux = vec![
+                "/usr/share/fonts".to_string(),
+                "/usr/local/share/fonts".to_string(),
+            ];
 
-                    if let Some(home_dir) = home_dir() {
-                        macos.push(format!("{}/Library/Fonts/", home_dir.to_str().unwrap()));
-                    };
+            if let Some(home_dir) = home_dir() {
+                linux.push(format!(
+                    "{}/.local/share/fonts/",
+                    home_dir.to_str().unwrap()
+                ));
+            };
 
-                    macos
-                }
-                _ => {
-                    let mut linux = vec![
-                        "/usr/share/fonts".to_string(),
-                        "/usr/local/share/fonts".to_string(),
-                    ];
-
-                    if let Some(home_dir) = home_dir() {
-                        linux.push(format!(
-                            "{}/.local/share/fonts/",
-                            home_dir.to_str().unwrap()
-                        ));
-                    };
-
-                    linux
-                }
-            },
-        )
+            linux
+        })
     }
 }
 
