@@ -55,4 +55,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: nykanen/figmaid:latest,nykanen/figmaid:{{ github.ref }}
+          tags: nykanen/figmaid:latest,nykanen/figmaid:${{ github.ref }}
