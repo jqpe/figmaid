@@ -9,7 +9,7 @@ user="$(whoami)"
 
 docker run -d -p 18412:18412 \
 -v /usr/share/fonts:/usr/share/fonts:ro \
--v /home/$user/.config/figmaid/figmaid.json:/root/.config/figmaid/figmaid.json \
+-v ~/.config/figmaid/figmaid.json:/root/.config/figmaid/figmaid.json \
 --name figmaid --restart always \
 nykanen/figmaid
 ```
@@ -40,13 +40,13 @@ user="$(whoami)"
 
 docker run -d -p 18412:18412 \
 -v /usr/share/fonts:/usr/share/fonts:ro \
--v /home/$user/Downloads:/root/Downloads:ro \
--v /home/$user/.config/figmaid/figmaid.json:/root/.config/figmaid/figmaid.json:rw \
+-v ~/Downloads:/root/Downloads:ro \
+-v ~/.config/figmaid/figmaid.json:/root/.config/figmaid/figmaid.json:rw \
 --name figmaid --restart always \
 nykanen/figmaid
 ```
 
-Above we bound the default directory for downloaded files on Ubuntu to `/root/Downloads`. Remember to add this directory to your configuration file by editing `/home/$user/.config/figmaid/figmaid.json` and add the directory for *what the directory path is inside the container*. In this case our configuration file would contain the following directories: `/usr/share/fonts` and `/root/Downloads`.
+Above we bound the default directory for downloaded files on Ubuntu to `/root/Downloads`. Remember to add this directory to your configuration file by editing `~/.config/figmaid/figmaid.json` and add the directory for *what the directory path is inside the container*. In this case our configuration file would contain the following directories: `/usr/share/fonts` and `/root/Downloads`.
 
 ## Verify that directories are included
 
