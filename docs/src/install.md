@@ -2,15 +2,16 @@
 
 figmaid currently only supports Linux. Previous versions included precompiled binaries for macOS (arm64 and x64) as well as Windows. For the documentation of the last macOS/Windows version switch to [tag v0.9.0](https://github.com/jqpe/figmaid/tree/v0.9.0/docs). If you want to use custom directories and thus need figmaid on macOS/Windows, you can still use the Docker image and continue to get updates. 
 
-There's three ways you can install figmaid
+There's four ways you can install figmaid
 1. With the installation script on Linux
    
    ```sh
    curl -fsSL https://raw.githubusercontent.com/jqpe/figmaid/main/install.sh | sh
    ```
 
-2. Building from source
+2. Downloading a precompiled binary from [releases](https://github.com/jqpe/figmaid/releases)
 3. Using the Docker image, documented in [figmaid in docker](./use/docker-image.md)
+4. Building from source
 
 > You can use figmaid on Windows/macOS via Docker, but you're probably better off using [FigmaAgent](https://help.figma.com/hc/en-us/articles/360039956894-Access-local-fonts-on-your-computer#browser) unless you need custom directories.
 > If you only intend on using installed fonts, FigmaAgent will pick those up.
