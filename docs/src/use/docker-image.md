@@ -5,8 +5,6 @@ You can also run figmaid inside a container. This comes with obvious benefits su
 Nevertheless, the benefits overshadow the caveats here for most people. Let's see it! 
 
 ```sh
-user="$(whoami)"
-
 docker run -d -p 18412:18412 \
 -v /usr/share/fonts:/usr/share/fonts:ro \
 -v ~/.config/figmaid/figmaid.json:/root/.config/figmaid/figmaid.json \
@@ -36,8 +34,6 @@ Simply changing your configuration file is not enough, you must bind the directo
 To add new bind mounts to figmaid you must first delete the first iteration, e.g. `docker rm -f figmaid` then create a new container with the additional bind mount:
 
 ```sh
-user="$(whoami)"
-
 docker run -d -p 18412:18412 \
 -v /usr/share/fonts:/usr/share/fonts:ro \
 -v ~/Downloads:/root/Downloads:ro \
