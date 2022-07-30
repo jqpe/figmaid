@@ -1,75 +1,55 @@
 use figmaid::font_metadata;
 use ttf_parser::Width;
 
+use serde_json::*;
+
 #[test]
 fn extract_font_metadata() {
     let font = include_bytes!("data/impact.ttf");
 
     let data = font_metadata::extract_font_metadata(font.to_vec()).expect("can read the font data");
-    let obj = data[0]
-        .as_object()
-        .expect("it's an array of font definitions in json format");
+    let obj = data[0].as_object().unwrap();
 
-    // family
-    let family = obj
-        .get("family")
-        .expect("has family")
-        .as_str()
-        .expect("family is a string");
+    assert_eq!(obj.as_str("family"), "Impact");
 
-    assert_eq!(family, "Impact");
+    assert_eq!(obj.as_str("id"), "Impact - 1992");
 
-    // id
-    let id = obj
-        .get("id")
-        .expect("has id")
-        .as_str()
-        .expect("id is a string");
+    assert!(!obj.as_bool("italic"));
 
-    assert_eq!(id, "Impact - 1992");
+    assert_eq!(obj.as_str("postscript"), "Impact");
 
-    // italic
-    let italic = obj
-        .get("italic")
-        .expect("has italic")
-        .as_bool()
-        .expect("italic is a boolean");
+    assert_eq!(obj.as_i64("stretch"), Width::Condensed.to_number() as i64);
 
-    assert!(!italic);
+    assert_eq!(obj.as_str("style"), "Normal");
 
-    // postscript
-    let postscript = obj
-        .get("postscript")
-        .expect("has postscript")
-        .as_str()
-        .expect("postscript is a string");
+    assert_eq!(obj.as_i64("weight"), 400);
+}
 
-    assert_eq!(postscript, "Impact");
+trait Test {
+    fn as_str(&self, key: &str) -> &str;
+    fn as_i64(&self, key: &str) -> i64;
+    fn as_bool(&self, key: &str) -> bool;
+}
 
-    // stretch
-    let stretch = obj
-        .get("stretch")
-        .expect("has stretch")
-        .as_i64()
-        .expect("stretch is a number");
+impl Test for Map<String, Value> {
+    fn as_str(&self, key: &str) -> &str {
+        self.get(key)
+            .unwrap_or_else(|| panic!("expected object to have ${key}"))
+            .as_str()
+            .unwrap_or_else(|| panic!("expected ${key} to be a string"))
+    }
 
-    assert_eq!(stretch, Width::Condensed.to_number() as i64);
+    fn as_i64(&self, key: &str) -> i64 {
+        self.get(key)
+            .unwrap_or_else(|| panic!("expected object to have ${key}"))
+            .as_i64()
+            .unwrap_or_else(|| panic!("expected ${key} to be a i64"))
+    }
 
-    // style
-    let style = obj
-        .get("style")
-        .expect("has style")
-        .as_str()
-        .expect("style is a string");
-
-    assert_eq!(style, "Normal");
-
-    // weight
-    let weight = obj
-        .get("weight")
-        .expect("has weight")
-        .as_i64()
-        .expect("weight is an integer");
-
-    assert_eq!(weight, 400);
+    fn as_bool(&self, key: &str) -> bool {
+        self.get(key)
+            .unwrap_or_else(|| panic!("expected object to have ${key}"))
+            .as_bool()
+            .unwrap_or_else(|| panic!("expected ${key} to be a bool"))
+    }
 }
