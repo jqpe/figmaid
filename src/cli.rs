@@ -44,16 +44,13 @@ pub async fn validate() {
                 eprintln!("Configuration is not valid JSON.")
             }
         }
-        Err(e) => {
-            if e.kind() == ErrorKind::NotFound {
-                eprintln!(
-                    "Validation failed because the configuration file hasn't been created.\
+        Err(e) => match e.kind() {
+            ErrorKind::NotFound => eprintln!(
+                "Validation failed because the configuration file hasn't been created.\
                    \n-> run `figmaid config create` to create it."
-                )
-            } else {
-                eprintln!("Couldn't validate because of io error: {}", e)
-            }
-        }
+            ),
+            _ => eprintln!("Couldn't validate because of io error: {}", e),
+        },
     }
 }
 
