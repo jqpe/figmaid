@@ -36,12 +36,12 @@ pub async fn validate() {
 
     match std::fs::read(config_path.clone()) {
         Ok(config) => {
-            if let Ok(config) = serde_json::from_str(&String::from_utf8_lossy(&config)) {
-                if is_config_valid(&config).await {
-                    println!("Configuration is OK.")
-                }
+            let config = serde_json::from_str(&String::from_utf8_lossy(&config));
+
+            if config.is_ok() && is_config_valid(&config.unwrap()).await {
+                println!("Configuration is OK.")
             } else {
-                println!("Configuration is not valid JSON.")
+                eprintln!("Configuration is not valid JSON.")
             }
         }
         Err(e) => {
