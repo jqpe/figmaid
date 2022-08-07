@@ -1,4 +1,4 @@
-use figmaid::{cli::*, config::load_config, font_metadata, server::start_server};
+use figmaid::{cli::cli, cli::config, config::load_config, font_metadata, server::start_server};
 
 #[tokio::main]
 async fn main() {
@@ -8,12 +8,12 @@ async fn main() {
         Some(("config", config)) => {
             match config.subcommand() {
                 Some(("create", _)) => {
-                    create(false);
+                    config::create(false);
                 }
                 Some(("validate", _)) => {
-                    validate().await;
+                    config::validate().await;
                 }
-                Some(("open", _)) => open(),
+                Some(("open", _)) => config::open(),
                 _ => {
                     let config = load_config();
 

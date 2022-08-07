@@ -1,25 +1,8 @@
-use clap::{crate_version, Command as Cmd};
 use std::fs::File;
 use std::io::{self, stdout, ErrorKind, Write};
 use std::path::{Path, PathBuf};
 
 use crate::config::{is_config_valid, Config};
-
-pub fn cli() -> Cmd<'static> {
-    Cmd::new("figmaid")
-        .version(crate_version!())
-        .about("Web server that allows you to use locally installed fonts in Figma")
-        .subcommand(
-            Cmd::new("config")
-                .about(
-                    "Create, open and validate configuration\
-                \n\nRun without subcommands to print current directories and amount of loaded fonts",
-                )
-                .subcommand(Cmd::new("create").about("Create default configuration file"))
-                .subcommand(Cmd::new("validate").about("Validate configuration"))
-                .subcommand(Cmd::new("open").about("Open configuration file in text editor")),
-        )
-}
 
 fn get_config_path() -> PathBuf {
     Path::new(&home::home_dir().expect("Couldn't get home directory"))
