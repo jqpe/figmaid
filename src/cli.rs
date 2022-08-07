@@ -36,7 +36,7 @@ pub async fn validate() {
 
     match std::fs::read(config_path) {
         Ok(config) => {
-            let config = serde_json::from_str(&String::from_utf8_lossy(&config));
+            let config = serde_json::from_slice(&config);
 
             if config.is_ok() && is_config_valid(&config.unwrap()).await {
                 println!("Configuration is OK.")
