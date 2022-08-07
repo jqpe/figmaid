@@ -1,11 +1,11 @@
 //! Handles requests to figma routes.
-//! - GET|OPTIONS `/figma/font-files` for a JSON file of all loaded fonts.
-//! - GET|OPTIONS `/figma/font-file` for a single font file.
+//! - GET `/figma/font-files` for a JSON file of all loaded fonts.
+//! - GET `/figma/font-file` for a single font file.
 //!
-//! OPTIONS is provided for CORS preflight requests with adequate response headers.
+//! OPTIONS is provided for CORS preflight requests with adequate response headers to all routes.
 //!
-//! Attempt to access other routes is considered an error from the user (should be Figma)
-//! and Bad Request is sent as a status code with empty body.
+//! Attempt to GET other routes is considered an error from the user (should be Figma)
+//! and 400 (Bad Request) is sent as a status code with empty body.
 
 use hyper::{body::Bytes, header::HeaderValue, Body, Method, Request, Response, StatusCode};
 use regex::Regex;
