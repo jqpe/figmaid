@@ -34,7 +34,7 @@ fn config_exists(config_path: &PathBuf) -> bool {
 pub async fn validate() {
     let config_path = get_config_path();
 
-    match std::fs::read(config_path.clone()) {
+    match std::fs::read(config_path) {
         Ok(config) => {
             let config = serde_json::from_str(&String::from_utf8_lossy(&config));
 
