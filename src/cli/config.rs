@@ -1,25 +1,8 @@
-use clap::{crate_version, Command as Cmd};
 use std::fs::File;
 use std::io::{self, stdout, ErrorKind, Write};
 use std::path::{Path, PathBuf};
 
 use crate::config::{is_config_valid, Config};
-
-pub fn cli() -> Cmd<'static> {
-    Cmd::new("figmaid")
-        .version(crate_version!())
-        .about("Web server that allows you to use locally installed fonts in Figma")
-        .subcommand(
-            Cmd::new("config")
-                .about(
-                    "Create, open and validate configuration\
-                \n\nRun without subcommands to print current directories and amount of loaded fonts",
-                )
-                .subcommand(Cmd::new("create").about("Create default configuration file"))
-                .subcommand(Cmd::new("validate").about("Validate configuration"))
-                .subcommand(Cmd::new("open").about("Open configuration file in text editor")),
-        )
-}
 
 fn get_config_path() -> PathBuf {
     Path::new(&home::home_dir().expect("Couldn't get home directory"))
@@ -34,26 +17,25 @@ fn config_exists(config_path: &PathBuf) -> bool {
 pub async fn validate() {
     let config_path = get_config_path();
 
-    match std::fs::read(config_path.clone()) {
+    match std::fs::read(config_path) {
         Ok(config) => {
-            let config = serde_json::from_str(&String::from_utf8_lossy(&config));
+            let config = serde_json::from_slice(&config);
 
-            if config.is_ok() && is_config_valid(&config.unwrap()).await {
-                println!("Configuration is OK.")
-            } else {
-                eprintln!("Configuration is not valid JSON.")
+            match (config.is_ok(), is_config_valid(&config.unwrap()).await) {
+                (true, true) => println!("Configuration is OK."),
+
+                (true, false) => eprintln!("Configuration is not valid."),
+
+                (false, _) => eprintln!("Configuration is not valid JSON."),
             }
         }
-        Err(e) => {
-            if e.kind() == ErrorKind::NotFound {
-                eprintln!(
-                    "Validation failed because the configuration file hasn't been created.\
+        Err(e) => match e.kind() {
+            ErrorKind::NotFound => eprintln!(
+                "Validation failed because the configuration file hasn't been created.\
                    \n-> run `figmaid config create` to create it."
-                )
-            } else {
-                eprintln!("Couldn't validate because of io error: {}", e)
-            }
-        }
+            ),
+            _ => eprintln!("Couldn't validate because of io error: {}", e),
+        },
     }
 }
 
@@ -95,42 +77,23 @@ pub fn create(force: bool) {
             }
             Err(e) => {
                 if e.kind() == ErrorKind::NotFound {
-                    return create_missing_dirs();
+                    match create_missing_dirs() {
+                        Ok(_) => create(false),
+                        Err(_) => eprintln!("Couldn't create configuration file: {:?}", e),
+                    }
                 };
-
-                eprintln!("Couldn't create configuration file: {:?}", e);
             }
         },
     }
 }
 
-/// Create ~/.config and ~/.config/figmaid if they don't exist, then run [`create`]
-fn create_missing_dirs() {
+/// Create ~/.config and ~/.config/figmaid if they don't exist
+fn create_missing_dirs() -> io::Result<()> {
     let home = home::home_dir().expect("Couldn't get home directory");
 
-    let dotconfig = Path::join(&home, ".config");
-    let figmaid = Path::join(&dotconfig, "figmaid");
+    let figmaid = Path::join(&home, ".config/figmaid");
 
-    let (dotconfigerr, figmaiderr) = (
-        File::open(&dotconfig).is_err(),
-        File::open(&figmaid).is_err(),
-    );
-
-    let panic_on_create_err = |path: &str| panic!("Couldn't create {path}");
-
-    if dotconfigerr {
-        std::fs::create_dir(&dotconfig)
-            .unwrap_or_else(|_| panic_on_create_err(dotconfig.to_str().unwrap()));
-    }
-
-    if figmaiderr {
-        std::fs::create_dir(&figmaid)
-            .unwrap_or_else(|_| panic_on_create_err(figmaid.to_str().unwrap()));
-    }
-
-    if figmaiderr || dotconfigerr {
-        create(false)
-    }
+    std::fs::create_dir_all(&figmaid)
 }
 
 /// Opens the configuration file
