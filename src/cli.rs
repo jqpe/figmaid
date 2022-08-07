@@ -38,10 +38,12 @@ pub async fn validate() {
         Ok(config) => {
             let config = serde_json::from_slice(&config);
 
-            if config.is_ok() && is_config_valid(&config.unwrap()).await {
-                println!("Configuration is OK.")
-            } else {
-                eprintln!("Configuration is not valid JSON.")
+            match (config.is_ok(), is_config_valid(&config.unwrap()).await) {
+                (true, true) => println!("Configuration is OK."),
+
+                (true, false) => eprintln!("Configuration is not valid."),
+
+                (false, _) => eprintln!("Configuration is not valid JSON."),
             }
         }
         Err(e) => match e.kind() {
