@@ -29,14 +29,15 @@ pub async fn figma(req: Request<Body>) -> Result<Response<Body>, Infallible> {
         .body(Body::empty())
         .unwrap();
 
-    match (req.uri().path(), req.method()) {
-        (FIGMA_FONT_FILES, &Method::GET | &Method::OPTIONS) => {
-            handle_font_files(config, &mut response)
-        }
-        (FIGMA_FONT_FILE, &Method::GET | &Method::OPTIONS) => handle_font_file(req, &mut response),
-        _ => {
-            *response.status_mut() = StatusCode::BAD_REQUEST;
-        }
+    match req.uri().path() {
+        FIGMA_FONT_FILES => handle_font_files(config, &mut response),
+        FIGMA_FONT_FILE => handle_font_file(req, &mut response),
+        _ => match req.method() {
+            &Method::OPTIONS => {}
+            _ => {
+                *response.status_mut() = StatusCode::BAD_REQUEST;
+            }
+        },
     };
 
     Ok(response)
