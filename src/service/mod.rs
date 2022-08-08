@@ -1,11 +1,11 @@
 //! Handles requests to figma routes.
-//! - GET|OPTIONS `/figma/font-files` for a JSON file of all loaded fonts.
-//! - GET|OPTIONS `/figma/font-file` for a single font file.
+//! - GET `/figma/font-files` for a JSON file of all loaded fonts.
+//! - GET `/figma/font-file` for a single font file.
 //!
-//! OPTIONS is provided for CORS preflight requests with adequate response headers.
+//! OPTIONS is provided for CORS preflight requests with adequate response headers to all routes.
 //!
-//! Attempt to access other routes is considered an error from the user (should be Figma)
-//! and Bad Request is sent as a status code with empty body.
+//! Attempt to GET other routes is considered an error from the user (should be Figma)
+//! and 400 (Bad Request) is sent as a status code with empty body.
 
 use hyper::{body::Bytes, header::HeaderValue, Body, Method, Request, Response, StatusCode};
 use regex::Regex;
@@ -29,14 +29,15 @@ pub async fn figma(req: Request<Body>) -> Result<Response<Body>, Infallible> {
         .body(Body::empty())
         .unwrap();
 
-    match (req.uri().path(), req.method()) {
-        (FIGMA_FONT_FILES, &Method::GET | &Method::OPTIONS) => {
-            handle_font_files(config, &mut response)
-        }
-        (FIGMA_FONT_FILE, &Method::GET | &Method::OPTIONS) => handle_font_file(req, &mut response),
-        _ => {
-            *response.status_mut() = StatusCode::BAD_REQUEST;
-        }
+    match req.uri().path() {
+        FIGMA_FONT_FILES => handle_font_files(config, &mut response),
+        FIGMA_FONT_FILE => handle_font_file(req, &mut response),
+        _ => match req.method() {
+            &Method::OPTIONS => {}
+            _ => {
+                *response.status_mut() = StatusCode::BAD_REQUEST;
+            }
+        },
     };
 
     Ok(response)
