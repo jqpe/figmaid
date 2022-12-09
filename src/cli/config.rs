@@ -10,7 +10,7 @@ fn get_config_path() -> PathBuf {
 }
 
 fn config_exists(config_path: &PathBuf) -> bool {
-    File::open(&config_path).is_ok()
+    File::open(config_path).is_ok()
 }
 
 /// Validates the configuration file
