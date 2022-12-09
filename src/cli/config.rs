@@ -42,11 +42,11 @@ pub async fn validate() {
 /// Creates the configuration file
 ///
 /// # Arguments
-/// * `force` Overwite exisiting configuration file
-pub fn create(force: bool) {
+/// * `overwrite` Overwite exisiting configuration file
+pub fn create(overwrite: bool) {
     let config_path = get_config_path();
 
-    match (config_exists(&config_path), force) {
+    match (config_exists(&config_path), overwrite) {
         (true, false) => {
             print!("Configuration file exists, overwrite with the default configuration? y/N ");
 
@@ -69,7 +69,7 @@ pub fn create(force: bool) {
             Ok(_) => {
                 println!(
                     "Succesfully {} configuration file.",
-                    match force {
+                    match overwrite {
                         true => "overwrote",
                         false => "created",
                     }
