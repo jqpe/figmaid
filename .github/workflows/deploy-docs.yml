@@ -1,4 +1,4 @@
-# Downloads mdbook (https://github.com/rust-lang/mdBook),  
+# Downloads mdbook (https://github.com/rust-lang/mdBook),
 # builds the documentation and uploads to Cloudflare Pages
 
 name: Deploy docs
@@ -8,7 +8,7 @@ on:
     paths:
       - 'docs/**'
     branches: [main]
- workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -26,7 +26,4 @@ jobs:
         run: /bin/mdbook build docs
 
       - name: Publish book
-        run: |
-        CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} \
-        CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} \
-        npx wrangler pages publish --project-name=figmaid docs/book
+        run: CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} npx wrangler pages publish --project-name=figmaid docs/book
