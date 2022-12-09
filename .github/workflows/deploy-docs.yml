@@ -1,3 +1,6 @@
+# Downloads mdbook (https://github.com/rust-lang/mdBook),  
+# builds the documentation and uploads to Cloudflare Pages
+
 name: Deploy docs
 
 on:
@@ -5,6 +8,7 @@ on:
     paths:
       - 'docs/**'
     branches: [main]
+ workflow_dispatch: 
 
 jobs:
   deploy:
@@ -12,24 +16,17 @@ jobs:
     name: Deploy docs
 
     steps:
-      - name: Install SSH Key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          known_hosts: unnecessary
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      - name: Adding Known Hosts
-        run: ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Download mdbook binary
+        run: curl -fsSL https://github.com/rust-lang/mdBook/releases/download/v0.4.22/mdbook-v0.4.22-x86_64-unknown-linux-gnu.tar.gz | tar -xz --directory=bin
 
-      - name: Build docs
-        uses: appleboy/ssh-action@v0.1.4
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script_stop: true # Stop executing on first failure.
-          script: |
-            cd /usr/src/figmaid/
-            git fetch origin main
-            git reset --hard FETCH_HEAD
-            cd docs && mdbook build -d /var/www/figmaid
+      - name: Build documentation
+        run: /bin/mdbook build docs
+
+      - name: Publish book
+        run: |
+        CLOUDFLARE_ACCOUNT_ID=${{ secrets.CLOUDFLARE_ACCOUNT_ID }} \
+        CLOUDFLARE_API_TOKEN=${{ secrets.CLOUDFLARE_API_TOKEN }} \
+        npx wrangler pages publish --project-name=figmaid docs/book
