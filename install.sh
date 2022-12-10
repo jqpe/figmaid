@@ -6,7 +6,7 @@ platform="$(uname -sm)"
 
 echo_error() {
 	echo >&2 "Figmaid doesn't support $1 at the moment, \
-see https://figmaid.nykanen.me/use/docker-image.html on how to use the Docker image on platforms other than Linux."
+see https://figmaid.pages.dev/use/docker-image.html on how to use the Docker image on platforms other than Linux."
 }
 
 if [ "$OS" = "Windows_NT" ]; then
